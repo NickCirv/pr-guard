@@ -1,0 +1,44 @@
+{
+  "name": "pr-guard",
+  "version": "1.0.0",
+  "description": "Stop reviewing bad PRs. Checks commits, branch names, descriptions, file limits, secrets, and merge conflicts. GitHub Action + CLI.",
+  "main": "src/index.js",
+  "bin": {
+    "pr-guard": "./bin/guard.js"
+  },
+  "scripts": {
+    "test": "node --test src/**/*.test.js",
+    "lint": "node --check bin/guard.js src/**/*.js action/index.js"
+  },
+  "keywords": [
+    "github-action",
+    "pull-request",
+    "code-review",
+    "ci",
+    "developer-tools",
+    "devtools",
+    "nodejs",
+    "quality",
+    "conventional-commits",
+    "pr-quality"
+  ],
+  "author": "Nicholas Ashkar",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NickCirv/pr-guard.git"
+  },
+  "homepage": "https://github.com/NickCirv/pr-guard#readme",
+  "bugs": {
+    "url": "https://github.com/NickCirv/pr-guard/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "js-yaml": "^4.1.0"
+  },
+  "type": "module"
+}

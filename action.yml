@@ -1,0 +1,38 @@
+name: 'PR Guard'
+description: 'PR quality gate — blocks bad PRs before they waste reviewer time'
+
+inputs:
+  config:
+    description: 'Path to .prguard.yml config file'
+    required: false
+    default: '.prguard.yml'
+  strict:
+    description: 'Fail on warnings in addition to errors'
+    required: false
+    default: 'false'
+  token:
+    description: 'GitHub token for posting PR comments (optional)'
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  passed:
+    description: 'Number of checks that passed'
+  failed:
+    description: 'Number of checks that failed'
+  warned:
+    description: 'Number of checks that produced warnings'
+  skipped:
+    description: 'Number of checks that were skipped'
+  success:
+    description: 'true if no failures (and no warnings in strict mode)'
+  markdown:
+    description: 'Full markdown report suitable for PR comments'
+
+runs:
+  using: 'node20'
+  main: 'action/index.js'
+
+branding:
+  icon: 'shield'
+  color: 'blue'
