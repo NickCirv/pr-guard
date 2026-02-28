@@ -4,7 +4,6 @@
  * Uses commander with lazy imports to keep startup fast.
  */
 
-import { createRequire } from 'module'
 import { readFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import path from 'path'
@@ -20,8 +19,9 @@ program
   .description('PR quality gate — blocks bad PRs before they waste reviewer time')
   .version(pkg.version, '-v, --version')
 
+// ── init subcommand ──────────────────────────────────────────────────────────
 program
-  .command('init', { isDefault: false })
+  .command('init')
   .description('Generate a .prguard.yml config template in the current directory')
   .action(async () => {
     const { writeFile, existsSync } = await import('fs')
@@ -43,7 +43,8 @@ program
     process.stdout.write(`\n  ${c.green('✓')} Created ${c.bold('.prguard.yml')} — edit to configure your checks.\n\n`)
   })
 
-program
+// ── run subcommand (explicit + default) ──────────────────────────────────────
+const runCmd = program
   .command('run', { isDefault: true, hidden: true })
   .description('Run PR quality checks (default command)')
   .option('--check <name>', 'Run a specific check only (commits, branch, description, files, conflicts, labels)')
@@ -52,7 +53,6 @@ program
   .option('--strict', 'Treat warnings as failures (exit 1)')
   .option('--branch <name>', 'Branch name to check (overrides git detection)')
   .option('--description <text>', 'PR description text to check')
-  .allowUnknownOption(false)
   .action(async (opts) => {
     try {
       const { loadConfig } = await import('../src/config.js')
@@ -84,26 +84,4 @@ program
     }
   })
 
-// Handle top-level flags that bypass subcommand routing
-const args = process.argv.slice(2)
-const isSubcommand = ['init', 'run', '--help', '-h', '--version', '-v'].some(
-  cmd => args[0] === cmd
-)
-
-if (!isSubcommand && args.length > 0 && !args[0].startsWith('-')) {
-  // Unknown subcommand — show help
-  program.outputHelp()
-  process.exit(0)
-}
-
-// Re-parse with correct defaults — if no subcommand, run default
-if (!isSubcommand || args[0]?.startsWith('--') || args[0]?.startsWith('-') || args.length === 0) {
-  // Inject 'run' as default subcommand
-  const adjustedArgs = args[0] === 'run'
-    ? process.argv
-    : [...process.argv.slice(0, 2), 'run', ...args]
-
-  await program.parseAsync(adjustedArgs)
-} else {
-  await program.parseAsync(process.argv)
-}
+await program.parseAsync(process.argv)

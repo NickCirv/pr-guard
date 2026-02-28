@@ -1,0 +1,38 @@
+# .prguard.yml — PR Guard configuration
+# https://github.com/NickCirv/pr-guard
+
+checks:
+  commits:
+    enabled: true
+    conventional: true        # Enforce conventional commit format
+    maxSubjectLength: 72      # Max chars for commit subject line
+
+  branch:
+    enabled: true
+    # pattern: "(feature|fix|chore|docs|release|hotfix)/.*"
+    maxLength: 60
+
+  description:
+    enabled: true
+    minLength: 50             # Minimum chars in PR description
+    requireWhat: true         # Require a "what changed" section
+    requireWhy: true          # Require a "why" or linked issue
+
+  files:
+    enabled: true
+    maxFileSize: 500KB        # Max size per file (supports KB, MB)
+    maxFiles: 50              # Max files changed per PR
+    forbidden:                # Patterns for files that should never be committed
+      - ".env"
+      - "*.pem"
+      - "*.key"
+      - "id_rsa"
+
+  labels:
+    enabled: true             # GitHub Action only
+
+  conflicts:
+    enabled: true             # Scan for unresolved merge conflict markers
+
+# Treat warnings as failures (useful in CI)
+strict: false
