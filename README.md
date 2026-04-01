@@ -1,3 +1,5 @@
+![Banner](banner.svg)
+
 # PR Guard
 
 Stop reviewing bad PRs. Let the robot do it.
